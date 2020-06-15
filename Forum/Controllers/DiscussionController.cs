@@ -29,6 +29,11 @@ namespace Forum.Controllers
             return View(forum);
         }
 
+        public ActionResult Create()
+        {
+            return View();
+        }
+
         // POST: Discussion/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -45,7 +50,19 @@ namespace Forum.Controllers
 
             return View(forum);
         }
-
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Models.Forum forum = db.Fora.Find(id);
+            if (forum == null)
+            {
+                return HttpNotFound();
+            }
+            return View(forum);
+        }
         // POST: Discussion/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -55,9 +72,10 @@ namespace Forum.Controllers
         {
             if (ModelState.IsValid)
             {
+                var idForum = forum.forumId;
                 db.Entry(forum).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Discussion",new { id =idForum});
             }
             return View(forum);
         }

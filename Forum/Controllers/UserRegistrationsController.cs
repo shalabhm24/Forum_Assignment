@@ -61,21 +61,21 @@ namespace Forum.Controllers
             return View(userRegistration);
         }
 
-        //// GET: UserRegistrations/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    UserRegistration userRegistration = db.UserRegistrations.Find(id);
-        //    if (userRegistration == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.statusId = new SelectList(db.UserStatus, "statusId", "statusName", userRegistration.statusId);
-        //    return View(userRegistration);
-        //}
+        // GET: UserRegistrations/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            UserRegistration userRegistration = db.UserRegistrations.Find(id);
+            if (userRegistration == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.statusId = new SelectList(db.UserStatus, "statusId", "statusName", userRegistration.statusId);
+            return View(userRegistration);
+        }
 
         // POST: UserRegistrations/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

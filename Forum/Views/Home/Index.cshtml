@@ -9,6 +9,6 @@
     @foreach(var item in Model)
     {
         <tr>
-            <td>@Html.ActionLink(item.Name,"Index","Discussion", new {id = item.forumId })</td>
+            <td>@Html.ActionLink(item.Name,"Index","Discussion",new {id = item.forumId},null)</td>
         </tr>
     }
