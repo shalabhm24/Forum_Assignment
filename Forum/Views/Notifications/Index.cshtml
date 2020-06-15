@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Forum.Models.Notification>
+
+@{
+    ViewBag.Title = "Notifications";
+}
+
+<h2>Notifications</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.groupId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserRegistration.userName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.groupId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserRegistration.userName)
+        </td>
+        <td>
+            @Html.ActionLink("Approve", "Approve", new { id=item.logid }) |
+            @Html.ActionLink("Reject", "Delete", new { id=item.logid })
+        </td>
+    </tr>
+}
+
+</table>

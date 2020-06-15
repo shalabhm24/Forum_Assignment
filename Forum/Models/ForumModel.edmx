@@ -1,0 +1,683 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ForumModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Forum">
+          <Key>
+            <PropertyRef Name="forumId" />
+          </Key>
+          <Property Name="forumId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="250" />
+          <Property Name="date" Type="datetime" Nullable="false" />
+          <Property Name="isPublic" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ForumGroup">
+          <Key>
+            <PropertyRef Name="groupId" />
+          </Key>
+          <Property Name="groupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="forumId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GroupMember">
+          <Key>
+            <PropertyRef Name="logid" />
+          </Key>
+          <Property Name="groupId" Type="int" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="logid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="logid" />
+          </Key>
+          <Property Name="groupId" Type="int" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="logid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="logId" />
+          </Key>
+          <Property Name="groupId" Type="int" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="comments" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="IsPublished" Type="bit" Nullable="false" />
+          <Property Name="logId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="roleId" />
+          </Key>
+          <Property Name="roleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="roleName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Forum.dbo.UserLogin' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="UserLogin">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="userName" />
+            <PropertyRef Name="password" />
+          </Key>
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="userName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserRegistration">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="contactNo" Type="int" Nullable="false" />
+          <Property Name="emailId" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="statusId" Type="int" Nullable="false" />
+          <Property Name="userName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserRoles">
+          <Key>
+            <PropertyRef Name="logId" />
+          </Key>
+          <Property Name="userid" Type="int" Nullable="false" />
+          <Property Name="roleid" Type="int" Nullable="false" />
+          <Property Name="logId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserStatus">
+          <Key>
+            <PropertyRef Name="statusId" />
+          </Key>
+          <Property Name="statusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="statusName" Type="varchar" MaxLength="60" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__ForumGrou__forum__30F848ED">
+          <End Role="Forum" Type="Self.Forum" Multiplicity="1" />
+          <End Role="ForumGroup" Type="Self.ForumGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Forum">
+              <PropertyRef Name="forumId" />
+            </Principal>
+            <Dependent Role="ForumGroup">
+              <PropertyRef Name="forumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GroupMemb__group__32E0915F">
+          <End Role="ForumGroup" Type="Self.ForumGroup" Multiplicity="1" />
+          <End Role="GroupMember" Type="Self.GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForumGroup">
+              <PropertyRef Name="groupId" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="groupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GroupMemb__userI__33D4B598">
+          <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="1" />
+          <End Role="GroupMember" Type="Self.GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegistration">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Notificat__group__38996AB5">
+          <End Role="ForumGroup" Type="Self.ForumGroup" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForumGroup">
+              <PropertyRef Name="groupId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="groupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Notificat__userI__398D8EEE">
+          <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegistration">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Post__groupId__35BCFE0A">
+          <End Role="ForumGroup" Type="Self.ForumGroup" Multiplicity="1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForumGroup">
+              <PropertyRef Name="groupId" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="groupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Post__userId__36B12243">
+          <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegistration">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRegis__statu__276EDEB3">
+          <End Role="UserStatus" Type="Self.UserStatus" Multiplicity="1" />
+          <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserStatus">
+              <PropertyRef Name="statusId" />
+            </Principal>
+            <Dependent Role="UserRegistration">
+              <PropertyRef Name="statusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRoles__rolei__2C3393D0">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="roleId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="roleid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRoles__useri__2B3F6F97">
+          <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="1" />
+          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegistration">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ForumModelStoreContainer">
+          <EntitySet Name="Forum" EntityType="Self.Forum" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ForumGroup" EntityType="Self.ForumGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GroupMember" EntityType="Self.GroupMember" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRegistration" EntityType="Self.UserRegistration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserStatus" EntityType="Self.UserStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserLogin" EntityType="Self.UserLogin" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [UserLogin].[userId] AS [userId], 
+    [UserLogin].[userName] AS [userName], 
+    [UserLogin].[password] AS [password]
+    FROM [dbo].[UserLogin] AS [UserLogin]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__ForumGrou__forum__30F848ED" Association="Self.FK__ForumGrou__forum__30F848ED">
+            <End Role="Forum" EntitySet="Forum" />
+            <End Role="ForumGroup" EntitySet="ForumGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GroupMemb__group__32E0915F" Association="Self.FK__GroupMemb__group__32E0915F">
+            <End Role="ForumGroup" EntitySet="ForumGroup" />
+            <End Role="GroupMember" EntitySet="GroupMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GroupMemb__userI__33D4B598" Association="Self.FK__GroupMemb__userI__33D4B598">
+            <End Role="UserRegistration" EntitySet="UserRegistration" />
+            <End Role="GroupMember" EntitySet="GroupMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Notificat__group__38996AB5" Association="Self.FK__Notificat__group__38996AB5">
+            <End Role="ForumGroup" EntitySet="ForumGroup" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Notificat__userI__398D8EEE" Association="Self.FK__Notificat__userI__398D8EEE">
+            <End Role="UserRegistration" EntitySet="UserRegistration" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Post__groupId__35BCFE0A" Association="Self.FK__Post__groupId__35BCFE0A">
+            <End Role="ForumGroup" EntitySet="ForumGroup" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Post__userId__36B12243" Association="Self.FK__Post__userId__36B12243">
+            <End Role="UserRegistration" EntitySet="UserRegistration" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRegis__statu__276EDEB3" Association="Self.FK__UserRegis__statu__276EDEB3">
+            <End Role="UserStatus" EntitySet="UserStatus" />
+            <End Role="UserRegistration" EntitySet="UserRegistration" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRoles__rolei__2C3393D0" Association="Self.FK__UserRoles__rolei__2C3393D0">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRoles__useri__2B3F6F97" Association="Self.FK__UserRoles__useri__2B3F6F97">
+            <End Role="UserRegistration" EntitySet="UserRegistration" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ForumModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Forum">
+          <Key>
+            <PropertyRef Name="forumId" />
+          </Key>
+          <Property Name="forumId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="isPublic" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ForumGroups" Relationship="Self.FK__ForumGrou__forum__30F848ED" FromRole="Forum" ToRole="ForumGroup" />
+        </EntityType>
+        <EntityType Name="ForumGroup">
+          <Key>
+            <PropertyRef Name="groupId" />
+          </Key>
+          <Property Name="groupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="forumId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Forum" Relationship="Self.FK__ForumGrou__forum__30F848ED" FromRole="ForumGroup" ToRole="Forum" />
+          <NavigationProperty Name="GroupMembers" Relationship="Self.FK__GroupMemb__group__32E0915F" FromRole="ForumGroup" ToRole="GroupMember" />
+          <NavigationProperty Name="Notifications" Relationship="Self.FK__Notificat__group__38996AB5" FromRole="ForumGroup" ToRole="Notification" />
+          <NavigationProperty Name="Posts" Relationship="Self.FK__Post__groupId__35BCFE0A" FromRole="ForumGroup" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="GroupMember">
+          <Key>
+            <PropertyRef Name="logid" />
+          </Key>
+          <Property Name="groupId" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="logid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="ForumGroup" Relationship="Self.FK__GroupMemb__group__32E0915F" FromRole="GroupMember" ToRole="ForumGroup" />
+          <NavigationProperty Name="UserRegistration" Relationship="Self.FK__GroupMemb__userI__33D4B598" FromRole="GroupMember" ToRole="UserRegistration" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="logid" />
+          </Key>
+          <Property Name="groupId" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="logid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="ForumGroup" Relationship="Self.FK__Notificat__group__38996AB5" FromRole="Notification" ToRole="ForumGroup" />
+          <NavigationProperty Name="UserRegistration" Relationship="Self.FK__Notificat__userI__398D8EEE" FromRole="Notification" ToRole="UserRegistration" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="logId" />
+          </Key>
+          <Property Name="groupId" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
+          <Property Name="logId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="ForumGroup" Relationship="Self.FK__Post__groupId__35BCFE0A" FromRole="Post" ToRole="ForumGroup" />
+          <NavigationProperty Name="UserRegistration" Relationship="Self.FK__Post__userId__36B12243" FromRole="Post" ToRole="UserRegistration" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="roleId" />
+          </Key>
+          <Property Name="roleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="UserRoles" Relationship="Self.FK__UserRoles__rolei__2C3393D0" FromRole="Roles" ToRole="UserRoles" />
+        </EntityType>
+        <EntityType Name="UserRegistration">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contactNo" Type="Int32" Nullable="false" />
+          <Property Name="emailId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="statusId" Type="Int32" Nullable="false" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="GroupMembers" Relationship="Self.FK__GroupMemb__userI__33D4B598" FromRole="UserRegistration" ToRole="GroupMember" />
+          <NavigationProperty Name="Notifications" Relationship="Self.FK__Notificat__userI__398D8EEE" FromRole="UserRegistration" ToRole="Notification" />
+          <NavigationProperty Name="Posts" Relationship="Self.FK__Post__userId__36B12243" FromRole="UserRegistration" ToRole="Post" />
+          <NavigationProperty Name="UserStatu" Relationship="Self.FK__UserRegis__statu__276EDEB3" FromRole="UserRegistration" ToRole="UserStatus" />
+          <NavigationProperty Name="UserRoles" Relationship="Self.FK__UserRoles__useri__2B3F6F97" FromRole="UserRegistration" ToRole="UserRoles" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="logId" />
+          </Key>
+          <Property Name="userid" Type="Int32" Nullable="false" />
+          <Property Name="roleid" Type="Int32" Nullable="false" />
+          <Property Name="logId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Role" Relationship="Self.FK__UserRoles__rolei__2C3393D0" FromRole="UserRoles" ToRole="Roles" />
+          <NavigationProperty Name="UserRegistration" Relationship="Self.FK__UserRoles__useri__2B3F6F97" FromRole="UserRoles" ToRole="UserRegistration" />
+        </EntityType>
+        <EntityType Name="UserStatu">
+          <Key>
+            <PropertyRef Name="statusId" />
+          </Key>
+          <Property Name="statusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="statusName" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="UserRegistrations" Relationship="Self.FK__UserRegis__statu__276EDEB3" FromRole="UserStatus" ToRole="UserRegistration" />
+        </EntityType>
+        <EntityType Name="UserLogin">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="userName" />
+            <PropertyRef Name="password" />
+          </Key>
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__ForumGrou__forum__30F848ED">
+          <End Role="Forum" Type="Self.Forum" Multiplicity="1" />
+          <End Role="ForumGroup" Type="Self.ForumGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Forum">
+              <PropertyRef Name="forumId" />
+            </Principal>
+            <Dependent Role="ForumGroup">
+              <PropertyRef Name="forumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GroupMemb__group__32E0915F">
+          <End Role="ForumGroup" Type="Self.ForumGroup" Multiplicity="1" />
+          <End Role="GroupMember" Type="Self.GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForumGroup">
+              <PropertyRef Name="groupId" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="groupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Notificat__group__38996AB5">
+          <End Role="ForumGroup" Type="Self.ForumGroup" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForumGroup">
+              <PropertyRef Name="groupId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="groupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Post__groupId__35BCFE0A">
+          <End Role="ForumGroup" Type="Self.ForumGroup" Multiplicity="1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForumGroup">
+              <PropertyRef Name="groupId" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="groupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GroupMemb__userI__33D4B598">
+          <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="1" />
+          <End Role="GroupMember" Type="Self.GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegistration">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Notificat__userI__398D8EEE">
+          <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegistration">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Post__userId__36B12243">
+          <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegistration">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRoles__rolei__2C3393D0">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+          <End Role="UserRoles" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="roleId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="roleid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRegis__statu__276EDEB3">
+          <End Role="UserStatus" Type="Self.UserStatu" Multiplicity="1" />
+          <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserStatus">
+              <PropertyRef Name="statusId" />
+            </Principal>
+            <Dependent Role="UserRegistration">
+              <PropertyRef Name="statusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRoles__useri__2B3F6F97">
+          <End Role="UserRegistration" Type="Self.UserRegistration" Multiplicity="1" />
+          <End Role="UserRoles" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRegistration">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Fora" EntityType="Self.Forum" />
+          <EntitySet Name="ForumGroups" EntityType="Self.ForumGroup" />
+          <EntitySet Name="GroupMembers" EntityType="Self.GroupMember" />
+          <EntitySet Name="Notifications" EntityType="Self.Notification" />
+          <EntitySet Name="Posts" EntityType="Self.Post" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="UserRegistrations" EntityType="Self.UserRegistration" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
+          <EntitySet Name="UserStatus" EntityType="Self.UserStatu" />
+          <EntitySet Name="UserLogins" EntityType="Self.UserLogin" />
+          <AssociationSet Name="FK__ForumGrou__forum__30F848ED" Association="Self.FK__ForumGrou__forum__30F848ED">
+            <End Role="Forum" EntitySet="Fora" />
+            <End Role="ForumGroup" EntitySet="ForumGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GroupMemb__group__32E0915F" Association="Self.FK__GroupMemb__group__32E0915F">
+            <End Role="ForumGroup" EntitySet="ForumGroups" />
+            <End Role="GroupMember" EntitySet="GroupMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Notificat__group__38996AB5" Association="Self.FK__Notificat__group__38996AB5">
+            <End Role="ForumGroup" EntitySet="ForumGroups" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Post__groupId__35BCFE0A" Association="Self.FK__Post__groupId__35BCFE0A">
+            <End Role="ForumGroup" EntitySet="ForumGroups" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GroupMemb__userI__33D4B598" Association="Self.FK__GroupMemb__userI__33D4B598">
+            <End Role="UserRegistration" EntitySet="UserRegistrations" />
+            <End Role="GroupMember" EntitySet="GroupMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Notificat__userI__398D8EEE" Association="Self.FK__Notificat__userI__398D8EEE">
+            <End Role="UserRegistration" EntitySet="UserRegistrations" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Post__userId__36B12243" Association="Self.FK__Post__userId__36B12243">
+            <End Role="UserRegistration" EntitySet="UserRegistrations" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRoles__rolei__2C3393D0" Association="Self.FK__UserRoles__rolei__2C3393D0">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRegis__statu__276EDEB3" Association="Self.FK__UserRegis__statu__276EDEB3">
+            <End Role="UserStatus" EntitySet="UserStatus" />
+            <End Role="UserRegistration" EntitySet="UserRegistrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRoles__useri__2B3F6F97" Association="Self.FK__UserRoles__useri__2B3F6F97">
+            <End Role="UserRegistration" EntitySet="UserRegistrations" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ForumModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Fora">
+            <EntityTypeMapping TypeName="ForumModel.Forum">
+              <MappingFragment StoreEntitySet="Forum">
+                <ScalarProperty Name="forumId" ColumnName="forumId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="isPublic" ColumnName="isPublic" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ForumGroups">
+            <EntityTypeMapping TypeName="ForumModel.ForumGroup">
+              <MappingFragment StoreEntitySet="ForumGroup">
+                <ScalarProperty Name="groupId" ColumnName="groupId" />
+                <ScalarProperty Name="forumId" ColumnName="forumId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GroupMembers">
+            <EntityTypeMapping TypeName="ForumModel.GroupMember">
+              <MappingFragment StoreEntitySet="GroupMember">
+                <ScalarProperty Name="groupId" ColumnName="groupId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="logid" ColumnName="logid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="ForumModel.Notification">
+              <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="groupId" ColumnName="groupId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="logid" ColumnName="logid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="ForumModel.Post">
+              <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="groupId" ColumnName="groupId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
+                <ScalarProperty Name="logId" ColumnName="logId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="ForumModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="roleName" ColumnName="roleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRegistrations">
+            <EntityTypeMapping TypeName="ForumModel.UserRegistration">
+              <MappingFragment StoreEntitySet="UserRegistration">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="contactNo" ColumnName="contactNo" />
+                <ScalarProperty Name="emailId" ColumnName="emailId" />
+                <ScalarProperty Name="statusId" ColumnName="statusId" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="ForumModel.UserRole">
+              <MappingFragment StoreEntitySet="UserRoles">
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="roleid" ColumnName="roleid" />
+                <ScalarProperty Name="logId" ColumnName="logId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserStatus">
+            <EntityTypeMapping TypeName="ForumModel.UserStatu">
+              <MappingFragment StoreEntitySet="UserStatus">
+                <ScalarProperty Name="statusId" ColumnName="statusId" />
+                <ScalarProperty Name="statusName" ColumnName="statusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLogins">
+            <EntityTypeMapping TypeName="ForumModel.UserLogin">
+              <MappingFragment StoreEntitySet="UserLogin">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

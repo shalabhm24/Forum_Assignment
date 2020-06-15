@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Forum.Models.Post>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.comments)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {  id=item.logId}) |
+            @Html.ActionLink("Delete", "Delete", new {  id=item.logId  })
+        </td>
+    </tr>
+}
+
+</table>

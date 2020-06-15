@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Forum.Models.Forum>
+
+@{
+    ViewBag.Title = "Forum Dashboard";
+}
+    <h1>
+    Welcome to DiscussOut Forum
+    </h1>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@Html.ActionLink(item.Name,"Index","Discussion", new {id = item.forumId })</td>
+        </tr>
+    }
