@@ -56,3 +56,15 @@ Admin Pages -
 2. Group/Forum Management - Create/Update/Delete Group.  Send invitation to user to join group.
 
 ----------------------------------------------------------------
+
+Database Tables:-
+UserRegistration --containing registration info
+UserLogin- containing login info
+Roles - containing all roles of site and forum config table
+UserRoles - userid and roleid mapping for user and their roles
+Forum - Forum info 
+ForumGroup - containing mapping of groupid and forumid
+GroupMember - containing mapping of userid and groupid
+Notification - containing info of user requesting to join the group via group id
+Post - containg info regrding each post
+UserStatus - blocked and active user statusid config table
