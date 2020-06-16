@@ -36,7 +36,7 @@ namespace Forum.Controllers
             }
             return View(model);
         }
-        [HttpPost]
+
         [Authorize]
         public ActionResult Logout()
         {

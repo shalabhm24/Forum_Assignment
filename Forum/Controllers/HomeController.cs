@@ -12,9 +12,10 @@ namespace Forum.Controllers
     {
         private Entities db = new Entities();
         // GET: Home
-        [Authorize]
+        [AllowAnonymous]
         public ActionResult Index()
         {
+            HttpContext.Session.Clear();
             return View(db.Fora.ToList());
         }
 

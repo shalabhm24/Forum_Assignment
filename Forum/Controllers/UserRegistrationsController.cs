@@ -37,6 +37,7 @@ namespace Forum.Controllers
         }
 
         // GET: UserRegistrations/Create
+        [AllowAnonymous]
         public ActionResult Create()
         {
             ViewBag.statusId = new SelectList(db.UserStatus, "statusId", "statusName");
